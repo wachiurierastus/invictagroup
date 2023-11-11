@@ -13,12 +13,12 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index()
     {
         $subjects = Subject::with('teacher')->latest()->paginate(10);
-        
+
         return view('backend.subjects.index', compact('subjects'));
 
     }
@@ -126,5 +126,5 @@ class SubjectController extends Controller
     }
 
 
-    
+
 }
