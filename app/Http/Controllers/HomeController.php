@@ -33,7 +33,7 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         if ($user->hasRole('Admin')) {
 
             $parents = Parents::latest()->get();
@@ -51,37 +51,37 @@ class HomeController extends Controller
             return view('home', compact('teacher'));
 
         } elseif ($user->hasRole('Parent')) {
-            
-            $parents = Parents::with(['children'])->withCount('children')->findOrFail($user->parent->id); 
+
+            $parents = Parents::with(['children'])->withCount('children')->findOrFail($user->parent->id);
 
             return view('home', compact('parents'));
 
         } elseif ($user->hasRole('Student')) {
-            
-            $student = Student::with(['user','parent','class','attendances'])->findOrFail($user->student->id); 
+
+            $student = Student::with(['user','parent','class','attendances'])->findOrFail($user->student->id);
 
             return view('home', compact('student'));
 
         } else {
             return 'NO ROLE ASSIGNED YET!';
         }
-        
+
     }
 
     /**
      * PROFILE
      */
-    public function profile() 
+    public function profile()
     {
         return view('profile.index');
     }
 
-    public function profileEdit() 
+    public function profileEdit()
     {
         return view('profile.edit');
     }
 
-    public function profileUpdate(Request $request) 
+    public function profileUpdate(Request $request)
     {
         $request->validate([
             'name'  => 'required|string|max:255',
@@ -110,12 +110,12 @@ class HomeController extends Controller
      * CHANGE PASSWORD
      */
     public function changePasswordForm()
-    {  
+    {
         return view('profile.changepassword');
     }
 
     public function changePassword(Request $request)
-    {     
+    {
         if (!(Hash::check($request->get('currentpassword'), Auth::user()->password))) {
             return back()->with([
                 'msg_currentpassword' => 'Your current password does not matches with the password you provided! Please try again.'
@@ -138,6 +138,6 @@ class HomeController extends Controller
         $user->save();
 
         Auth::logout();
-        return redirect()->route('login');
+        return redirect('login');
     }
 }
